@@ -50,6 +50,7 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    // 상품에 폴더 추가
     @PostMapping("/products/{productId}/folder")
     public void addFolder(
             @PathVariable Long productId,
@@ -61,7 +62,6 @@ public class ProductController {
 
     @GetMapping("/folders/{folderId}/products")
     public Page<ProductResponseDto> getProductsInFolder(@PathVariable Long folderId, @RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("sortBy") String sortBy, @RequestParam("isAsc") boolean isAsc, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
 
         return productService.getProductsInFolder(folderId,page-1,size,sortBy,isAsc,userDetails.getUser());
     }
