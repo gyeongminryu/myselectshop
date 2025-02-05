@@ -23,14 +23,14 @@ public class ProductController {
 
     @PostMapping("/products")
     public ProductResponseDto createProduct(@RequestBody ProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return productService.createProduct(requestDto,userDetails.getUser());
+        return productService.createProduct(requestDto, userDetails.getUser());
     }
 
     //관심 상품 희망 최저가 등록하는 부분
     @PutMapping("/products/{id}")
     public ProductResponseDto updateProduct(@PathVariable Long id, @RequestBody ProductMypriceRequestDto requestDto) {
 
-        return productService.updateProduct(id,requestDto);
+        return productService.updateProduct(id, requestDto);
     }
 
     @GetMapping("/products")
@@ -42,7 +42,7 @@ public class ProductController {
 
 
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return productService.getProducts(userDetails.getUser(),page-1,size,sortBy,isAsc);
+        return productService.getProducts(userDetails.getUser(), page - 1, size, sortBy, isAsc);
     }
 
     @GetMapping("/admin/products")
@@ -55,9 +55,15 @@ public class ProductController {
             @PathVariable Long productId,
             @RequestParam Long folderId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
-            ) {
-            productService.addFolder(productId,folderId,userDetails.getUser());
+    ) {
+        productService.addFolder(productId, folderId, userDetails.getUser());
     }
 
+    @GetMapping("/folders/{folderId}/products")
+    public Page<ProductResponseDto> getProductsInFolder(@PathVariable Long folderId, @RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("sortBy") String sortBy, @RequestParam("isAsc") boolean isAsc, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
+
+        return productService.getProductsInFolder(folderId,page-1,size,sortBy,isAsc,userDetails.getUser());
+    }
 }
+
