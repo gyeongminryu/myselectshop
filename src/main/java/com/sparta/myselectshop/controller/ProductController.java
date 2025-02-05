@@ -4,8 +4,11 @@ package com.sparta.myselectshop.controller;
 import com.sparta.myselectshop.dto.ProductMypriceRequestDto;
 import com.sparta.myselectshop.dto.ProductRequestDto;
 import com.sparta.myselectshop.dto.ProductResponseDto;
+import com.sparta.myselectshop.security.UserDetailsImpl;
 import com.sparta.myselectshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +22,8 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/products")
-    public ProductResponseDto createProduct(@RequestBody ProductRequestDto requestDto) {
-        return productService.createProduct(requestDto);
+    public ProductResponseDto createProduct(@RequestBody ProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return productService.createProduct(requestDto,userDetails.getUser());
     }
 
     //관심 상품 희망 최저가 등록하는 부분
@@ -31,8 +34,13 @@ public class ProductController {
     }
 
     @GetMapping("/products")
+    public List<ProductResponseDto> getAllProducts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return productService.getProducts(userDetails.getUser());
+    }
+
+    @GetMapping("/admin/products")
     public List<ProductResponseDto> getAllProducts() {
-        return productService.getProducts();
+        return productService.getAllProducts();
     }
 
 
